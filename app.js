@@ -14,7 +14,7 @@ function playRound(playerSelection, computerSelection) {
     // "You Win/Lose! Paper beats Rock / Rock beats Scissors / Scissors beat Paper!"
     //
     // Make playerSelection case-insensitive.
-    const playerChoise = capitalizeWord(playerSelection.toLowerCase());
+    const playerChoise = capitalizeWord(playerSelection);
     const computerChoise = capitalizeWord(computerSelection);
     let roundWinner = 'tie';
 
@@ -63,7 +63,7 @@ function playRound(playerSelection, computerSelection) {
         case 'tie':
             roundMessage = "It's a Tie!";
     }
-    return roundWinner, roundMessage;
+    return [roundWinner, roundMessage];
 }
 
 function capitalizeWord(word) {
@@ -78,16 +78,32 @@ function game() {
     // Loop 5 times:
     while (playerScore < 3 && computerScore < 3) {
         // prompt user to select option
+        let userOption = prompt('Rock, Paper or Scissors?', 'Rock').toLowerCase();
+        if (!OPTIONS.includes(userOption)) {
+            alert('Bad input, try again!');
+            continue;
+        }
         //  computerPlay
         let computerOption = computerPlay(OPTIONS);
-        let userOption = prompt('Rock, Paper or Scissors?').toLowerCase();
-
         //  playRound
-        //  display round result to console
+        let [roundWinner, roundMessage] = playRound(userOption, computerOption);
         //  update score
+        // console.log(roundMessage);
+        switch (roundWinner) {
+            case 'player':
+                playerScore++;
+                break;
+            case 'computer':
+                computerScore++;
+                break;
+        }
+        console.log(roundMessage);
+        let roundScore = `Score: ${playerScore} - ${computerScore}`;
+        console.log(roundScore);
     }
-    //
+    let gameWinner = playerScore > computerScore ? 'You' : 'Computer';
     // disply game result to console
+    console.log(`Game Over! ${gameWinner} Won!`);
     return;
 }
 
