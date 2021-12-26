@@ -67,7 +67,7 @@ function playRound(playerSelection, computerSelection) {
 }
 
 function capitalizeWord(word) {
-    return word[0].toUpperCase() + word.slice(1);
+    return word[0].toUpperCase() + word.slice(1).toLowerCase();
 }
 
 function game() {
@@ -75,16 +75,17 @@ function game() {
     // set comupter score and player score
     let playerScore = 0;
     let computerScore = 0;
-    // Loop 5 times:
-    while (playerScore < 3 && computerScore < 3) {
+    let roundNumber = 0;
+    // Loop 5 times or until one side scores 3:
+    while (roundNumber < 5 && playerScore < 3 && computerScore < 3) {
         // prompt user to select option
-        let userOption = prompt('Rock, Paper or Scissors?', 'Rock').toLowerCase();
+        let userOption = prompt('Choose your play:\nRock, Paper or Scissors?').toLowerCase();
         if (!OPTIONS.includes(userOption)) {
             alert('Bad input, try again!');
             continue;
         }
         //  computerPlay
-        let computerOption = computerPlay(OPTIONS);
+        let computerOption = 'paper'; //computerPlay(OPTIONS);
         //  playRound
         let [roundWinner, roundMessage] = playRound(userOption, computerOption);
         //  update score
@@ -97,9 +98,10 @@ function game() {
                 computerScore++;
                 break;
         }
-        console.log(roundMessage);
+        console.log(`Round Number ${roundNumber + 1}\n${roundMessage}`);
         let roundScore = `Score: ${playerScore} - ${computerScore}`;
         console.log(roundScore);
+        roundNumber++;
     }
     let gameWinner = playerScore > computerScore ? 'You' : 'Computer';
     // disply game result to console
