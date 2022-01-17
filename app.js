@@ -85,11 +85,10 @@ function game() {
             continue;
         }
         //  computerPlay
-        let computerOption = 'paper'; //computerPlay(OPTIONS);
+        let computerOption = computerPlay(OPTIONS);
         //  playRound
         let [roundWinner, roundMessage] = playRound(userOption, computerOption);
         //  update score
-        // console.log(roundMessage);
         switch (roundWinner) {
             case 'player':
                 playerScore++;
@@ -108,5 +107,7 @@ function game() {
     console.log(`Game Over! ${gameWinner} Won!`);
     return;
 }
+
+const buttons = document.querySelectorAll('button');
 
 game();
