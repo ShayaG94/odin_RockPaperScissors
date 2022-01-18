@@ -5,9 +5,22 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Rock Paper Scissors</title>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css" />
         <script defer src="app.js"></script>
     </head>
-    <body>
-        <button id="rock">Rock</button><button id="paper">Paper</button><button id="scissors">Scissors</button>
+    <body class="container">
+        <div class="columns is-mobile is-centered mt-6">
+            <div class="column is-four-fifths-mobile is-three-fifths-tablet is-half-desktop card">
+                <div class="card header">
+                    <h1 class="card-header-title is-size-4-mobile is-centered title has-text-link">Rock Paper Scissors</h1>
+                </div>
+                <div class="card-content is-centered section has-text-centered m-5 py-6" id="results">Hello</div>
+                <footer class="card-footer">
+                    <a href="#" class="card-footer-item is-info options" id="rock">Rock</a
+                    ><a href="#" class="card-footer-item is-info options" id="paper">Paper</a
+                    ><a href="#" class="card-footer-item is-info options" id="scissors">Scissors</a>.
+                </footer>
+            </div>
+        </div>
     </body>
 </html>

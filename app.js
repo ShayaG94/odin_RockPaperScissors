@@ -78,7 +78,7 @@ function game() {
     //  computerPlay
     let computerSelection = capitalizeWord(computerPlay(OPTIONS));
     //  playRound
-    const buttons = document.querySelectorAll('button');
+    const buttons = document.querySelectorAll('.options');
     buttons.forEach((child) => {
         child.addEventListener('click', (e) => {
             let playerSelection = capitalizeWord(e.target.id);
