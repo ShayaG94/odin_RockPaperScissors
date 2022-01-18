@@ -13,15 +13,12 @@ function playRound(playerSelection, computerSelection) {
     // Return a string that declares the winner of the round
     // "You Win/Lose! Paper beats Rock / Rock beats Scissors / Scissors beat Paper!"
     //
-    // Make playerSelection case-insensitive.
-    const playerChoise = capitalizeWord(playerSelection);
-    const computerChoise = capitalizeWord(computerSelection);
     let roundWinner = 'tie';
 
     // Go by playerSelection and compare to computer selection with switch
-    switch (playerChoise) {
+    switch (playerSelection) {
         case 'Rock':
-            switch (computerChoise) {
+            switch (computerSelection) {
                 case 'Paper':
                     roundWinner = 'computer';
                     break;
@@ -31,7 +28,7 @@ function playRound(playerSelection, computerSelection) {
             }
             break;
         case 'Paper':
-            switch (computerChoise) {
+            switch (computerSelection) {
                 case 'Rock':
                     roundWinner = 'player';
                     break;
@@ -41,7 +38,7 @@ function playRound(playerSelection, computerSelection) {
             }
             break;
         case 'Scissors':
-            switch (computerChoise) {
+            switch (computerSelection) {
                 case 'Rock':
                     roundWinner = 'computer';
                     break;
@@ -55,10 +52,10 @@ function playRound(playerSelection, computerSelection) {
     let roundMessage = '';
     switch (roundWinner) {
         case 'player':
-            roundMessage = `You Win! ${playerChoise} beats ${computerChoise}`;
+            roundMessage = `You Win! ${playerSelection} beats ${computerSelection}`;
             break;
         case 'computer':
-            roundMessage = `You Lose! ${computerChoise} beats ${playerChoise}`;
+            roundMessage = `You Lose! ${computerSelection} beats ${playerSelection}`;
             break;
         case 'tie':
             roundMessage = "It's a Tie!";
@@ -77,37 +74,38 @@ function game() {
     let computerScore = 0;
     let roundNumber = 0;
     // Loop 5 times or until one side scores 3:
-    while (roundNumber < 5 && playerScore < 3 && computerScore < 3) {
-        // prompt user to select option
-        let userOption = prompt('Choose your play:\nRock, Paper or Scissors?').toLowerCase();
-        if (!OPTIONS.includes(userOption)) {
-            alert('Bad input, try again!');
-            continue;
-        }
-        //  computerPlay
-        let computerOption = computerPlay(OPTIONS);
-        //  playRound
-        let [roundWinner, roundMessage] = playRound(userOption, computerOption);
-        //  update score
-        switch (roundWinner) {
-            case 'player':
-                playerScore++;
-                break;
-            case 'computer':
-                computerScore++;
-                break;
-        }
-        console.log(`Round Number ${roundNumber + 1}\n${roundMessage}`);
-        let roundScore = `Score: ${playerScore} - ${computerScore}`;
-        console.log(roundScore);
-        roundNumber++;
-    }
+    // while (roundNumber < 5 && playerScore < 3 && computerScore < 3) {
+    //  computerPlay
+    let computerSelection = capitalizeWord(computerPlay(OPTIONS));
+    //  playRound
+    const buttons = document.querySelectorAll('button');
+    buttons.forEach((child) => {
+        child.addEventListener('click', (e) => {
+            let playerSelection = capitalizeWord(e.target.id);
+            console.log(playerSelection);
+            let [roundWinner, roundMessage] = playRound(playerSelection, computerSelection);
+
+            //  update score
+            switch (roundWinner) {
+                case 'player':
+                    playerScore++;
+                    break;
+                case 'computer':
+                    computerScore++;
+                    break;
+            }
+            console.log(`Round Number ${roundNumber + 1}\n${roundMessage}`);
+            let roundScore = `Score: ${playerScore} - ${computerScore}`;
+            console.log(roundScore);
+            roundNumber++;
+        });
+    });
+    // break;
+    // }
     let gameWinner = playerScore > computerScore ? 'You' : 'Computer';
     // disply game result to console
     console.log(`Game Over! ${gameWinner} Won!`);
     return;
 }
-
-const buttons = document.querySelectorAll('button');
 
 game();
