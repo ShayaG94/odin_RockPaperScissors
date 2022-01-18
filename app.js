@@ -52,10 +52,10 @@ function playRound(playerSelection, computerSelection) {
     let roundMessage = '';
     switch (roundWinner) {
         case 'player':
-            roundMessage = `You Win! ${playerSelection} beats ${computerSelection}`;
+            roundMessage = `${playerSelection} beats ${computerSelection}!`;
             break;
         case 'computer':
-            roundMessage = `You Lose! ${computerSelection} beats ${playerSelection}`;
+            roundMessage = `${computerSelection} beats ${playerSelection}!`;
             break;
         case 'tie':
             roundMessage = "It's a Tie!";
@@ -67,45 +67,60 @@ function capitalizeWord(word) {
     return word[0].toUpperCase() + word.slice(1).toLowerCase();
 }
 
-function game() {
-    const OPTIONS = ['rock', 'paper', 'scissors'];
-    // set comupter score and player score
-    let playerScore = 0;
-    let computerScore = 0;
-    let roundNumber = 0;
-    // Loop 5 times or until one side scores 3:
-    // while (roundNumber < 5 && playerScore < 3 && computerScore < 3) {
-    //  computerPlay
-    let computerSelection = capitalizeWord(computerPlay(OPTIONS));
-    //  playRound
-    const buttons = document.querySelectorAll('.options');
-    buttons.forEach((child) => {
-        child.addEventListener('click', (e) => {
-            let playerSelection = capitalizeWord(e.target.id);
-            console.log(playerSelection);
-            let [roundWinner, roundMessage] = playRound(playerSelection, computerSelection);
-
-            //  update score
-            switch (roundWinner) {
-                case 'player':
-                    playerScore++;
-                    break;
-                case 'computer':
-                    computerScore++;
-                    break;
-            }
-            console.log(`Round Number ${roundNumber + 1}\n${roundMessage}`);
-            let roundScore = `Score: ${playerScore} - ${computerScore}`;
-            console.log(roundScore);
-            roundNumber++;
-        });
-    });
-    // break;
-    // }
-    let gameWinner = playerScore > computerScore ? 'You' : 'Computer';
-    // disply game result to console
-    console.log(`Game Over! ${gameWinner} Won!`);
-    return;
+function updateGuiScore(playerScore, computerScore) {
+    scoreboardPlayer.innerText = playerScore;
+    scoreboardComputer.innerText = computerScore;
+    if (playerScore > computerScore) {
+        scoreboardPlayer.className = 'has-text-success';
+        scoreboardComputer.className = 'has-text-danger';
+    } else if (playerScore < computerScore) {
+        scoreboardPlayer.className = 'has-text-danger';
+        scoreboardComputer.className = 'has-text-success';
+    } else {
+        scoreboardPlayer.className = 'has-text-warning';
+        scoreboardComputer.className = 'has-text-warning';
+    }
 }
 
-game();
+const OPTIONS = ['rock', 'paper', 'scissors'];
+const round = document.querySelector('#round>span');
+const scoreboardPlayer = document.querySelector('#playerScore>span');
+const scoreboardComputer = document.querySelector('#computerScore>span');
+const message = document.querySelector('#message');
+const buttons = document.querySelectorAll('.options');
+
+let playerScore = 0;
+let computerScore = 0;
+
+round.style.visibility = 'hidden';
+message.style.visibility = 'hidden';
+
+buttons.forEach((button) => {
+    button.addEventListener('click', (e) => {
+        round.innerText++;
+        round.style.visibility = 'visible';
+        let playerSelection = capitalizeWord(e.target.id);
+        let computerSelection = capitalizeWord(computerPlay(OPTIONS));
+        let [roundWinner, roundMessage] = playRound(playerSelection, computerSelection);
+        //  update score
+        switch (roundWinner) {
+            case 'player':
+                playerScore++;
+                break;
+            case 'computer':
+                computerScore++;
+                break;
+        }
+
+        updateGuiScore(playerScore, computerScore);
+
+        if (playerScore < 3 && computerScore < 3 && round.innerText < 5) {
+            message.innerText = `${roundMessage}`;
+            message.style.visibility = 'visible';
+        } else {
+            buttons.forEach((button) => button.setAttribute('disabled', 'true'));
+            let gameWinner = playerScore > computerScore ? 'You' : 'Computer';
+            message.innerText = `${`Game Over! ${gameWinner} Won!`}`;
+        }
+    });
+});
