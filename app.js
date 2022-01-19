@@ -84,6 +84,7 @@ function updateGuiScore(playerScore, computerScore) {
 
 const OPTIONS = ['rock', 'paper', 'scissors'];
 const round = document.querySelector('#round>span');
+const images = document.querySelectorAll('.column>img');
 const scoreboardPlayer = document.querySelector('#playerScore>span');
 const scoreboardComputer = document.querySelector('#computerScore>span');
 const message = document.querySelector('#message');
@@ -102,6 +103,18 @@ buttons.forEach((button) => {
         let playerSelection = capitalizeWord(e.target.id);
         let computerSelection = capitalizeWord(computerPlay(OPTIONS));
         let [roundWinner, roundMessage] = playRound(playerSelection, computerSelection);
+
+        images.forEach((image) => {
+            switch (image.id) {
+                case 'playerImg':
+                    image.src = `/img/${playerSelection}.png`;
+                    break;
+                case 'computerImg':
+                    image.src = `/img/${computerSelection}.png`;
+                    break;
+            }
+        });
+
         //  update score
         switch (roundWinner) {
             case 'player':
