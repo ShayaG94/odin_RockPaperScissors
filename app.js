@@ -17,32 +17,32 @@ function playRound(playerSelection, computerSelection) {
 
     // Go by playerSelection and compare to computer selection with switch
     switch (playerSelection) {
-        case 'Rock':
+        case 'rock':
             switch (computerSelection) {
-                case 'Paper':
+                case 'paper':
                     roundWinner = 'computer';
                     break;
-                case 'Scissors':
+                case 'scissors':
                     roundWinner = 'player';
                     break;
             }
             break;
-        case 'Paper':
+        case 'paper':
             switch (computerSelection) {
-                case 'Rock':
+                case 'rock':
                     roundWinner = 'player';
                     break;
-                case 'Scissors':
+                case 'scissors':
                     roundWinner = 'computer';
                     break;
             }
             break;
-        case 'Scissors':
+        case 'scissors':
             switch (computerSelection) {
-                case 'Rock':
+                case 'rock':
                     roundWinner = 'computer';
                     break;
-                case 'Paper':
+                case 'paper':
                     roundWinner = 'player';
                     break;
             }
@@ -52,10 +52,10 @@ function playRound(playerSelection, computerSelection) {
     let roundMessage = '';
     switch (roundWinner) {
         case 'player':
-            roundMessage = `${playerSelection} beats ${computerSelection}!`;
+            roundMessage = `${capitalizeWord(playerSelection)} beats ${capitalizeWord(computerSelection)}!`;
             break;
         case 'computer':
-            roundMessage = `${computerSelection} beats ${playerSelection}!`;
+            roundMessage = `${capitalizeWord(computerSelection)} beats ${capitalizeWord(playerSelection)}!`;
             break;
         case 'tie':
             roundMessage = "It's a Tie!";
@@ -82,6 +82,53 @@ function updateGuiScore(playerScore, computerScore) {
     }
 }
 
+function updateImages(playerSelection = null, computerSelection = null) {
+    if (playerSelection || computerSelection) {
+        images.forEach((image) => {
+            switch (image.id) {
+                case 'playerImg':
+                    image.src = `/img/${playerSelection}.png`;
+                    image.alt = `${playerSelection}`;
+                    break;
+                case 'computerImg':
+                    image.src = `/img/${computerSelection}.png`;
+                    image.alt = `${computerSelection}`;
+                    break;
+            }
+        });
+    } else {
+        images.forEach((image) => {
+            image.src = '';
+            image.alt = '';
+        });
+    }
+}
+
+function setResetBtn() {
+    resetBtn.classList.add('button', 'card-footer-item', 'is-info');
+    resetBtn.innerText = 'Restart Game!';
+    resetBtn.style.display = 'none';
+    document.querySelector('footer').appendChild(resetBtn);
+    resetBtn.addEventListener('click', resetGame);
+}
+
+function endGame() {
+    buttons.forEach((button) => (button.style.display = 'none'));
+    resetBtn.style.display = 'flex';
+}
+
+function resetGame() {
+    updateImages();
+    round.style.visibility = 'hidden';
+    message.style.visibility = 'hidden';
+    round.innerText = 0;
+    playerScore = 0;
+    computerScore = 0;
+    updateGuiScore(playerScore, computerScore);
+    resetBtn.style.display = 'none';
+    buttons.forEach((button) => (button.style.display = 'flex'));
+}
+
 const OPTIONS = ['rock', 'paper', 'scissors'];
 const round = document.querySelector('#round>span');
 const images = document.querySelectorAll('.column>img');
@@ -89,6 +136,8 @@ const scoreboardPlayer = document.querySelector('#playerScore>span');
 const scoreboardComputer = document.querySelector('#computerScore>span');
 const message = document.querySelector('#message');
 const buttons = document.querySelectorAll('.options');
+const resetBtn = document.createElement('button');
+setResetBtn();
 
 let playerScore = 0;
 let computerScore = 0;
@@ -100,20 +149,11 @@ buttons.forEach((button) => {
     button.addEventListener('click', (e) => {
         round.innerText++;
         round.style.visibility = 'visible';
-        let playerSelection = capitalizeWord(e.target.id);
-        let computerSelection = capitalizeWord(computerPlay(OPTIONS));
+        let playerSelection = e.target.id;
+        let computerSelection = computerPlay(OPTIONS);
         let [roundWinner, roundMessage] = playRound(playerSelection, computerSelection);
 
-        images.forEach((image) => {
-            switch (image.id) {
-                case 'playerImg':
-                    image.src = `/img/${playerSelection}.png`;
-                    break;
-                case 'computerImg':
-                    image.src = `/img/${computerSelection}.png`;
-                    break;
-            }
-        });
+        updateImages(playerSelection, computerSelection);
 
         //  update score
         switch (roundWinner) {
@@ -131,9 +171,9 @@ buttons.forEach((button) => {
             message.innerText = `${roundMessage}`;
             message.style.visibility = 'visible';
         } else {
-            buttons.forEach((button) => button.setAttribute('disabled', 'true'));
             let gameWinner = playerScore > computerScore ? 'You' : 'Computer';
             message.innerText = `${`Game Over! ${gameWinner} Won!`}`;
+            endGame();
         }
     });
 });
