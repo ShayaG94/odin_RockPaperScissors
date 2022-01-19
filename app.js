@@ -87,11 +87,11 @@ function updateImages(playerSelection = null, computerSelection = null) {
         images.forEach((image) => {
             switch (image.id) {
                 case 'playerImg':
-                    image.src = `/img/${playerSelection}..png`;
+                    image.src = `/img/${playerSelection}.png`;
                     image.alt = `${playerSelection}`;
                     break;
                 case 'computerImg':
-                    image.src = `/img/${computerSelection}..png`;
+                    image.src = `/img/${computerSelection}.png`;
                     image.alt = `${computerSelection}`;
                     break;
             }
@@ -105,7 +105,7 @@ function updateImages(playerSelection = null, computerSelection = null) {
 }
 
 function setResetBtn() {
-    resetBtn.classList.add('button', 'card-footer-item', 'is-info');
+    resetBtn.classList.add('button', 'is-success');
     resetBtn.innerText = 'Restart Game!';
     resetBtn.style.display = 'none';
     document.querySelector('footer').appendChild(resetBtn);
