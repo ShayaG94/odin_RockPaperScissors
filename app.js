@@ -10,7 +10,7 @@ function computerPlay(OPTIONS) {
 }
 
 function playRound(playerSelection, computerSelection) {
-    // Return a string that declares the winner of the round
+    // Return a string that declares the winner of the roundSpan
     // "You Win/Lose! Paper beats Rock / Rock beats Scissors / Scissors beat Paper!"
     //
     let roundWinner = 'tie';
@@ -119,9 +119,10 @@ function endGame() {
 
 function resetGame() {
     updateImages();
-    round.style.visibility = 'hidden';
     message.style.visibility = 'hidden';
-    round.innerText = 0;
+    roundSpan.style.visibility = 'hidden';
+    roundSpan.style.color = '';
+    roundNum = 0;
     playerScore = 0;
     computerScore = 0;
     updateGuiScore(playerScore, computerScore);
@@ -130,7 +131,7 @@ function resetGame() {
 }
 
 const OPTIONS = ['rock', 'paper', 'scissors'];
-const round = document.querySelector('#round>span');
+const roundSpan = document.querySelector('#round>span');
 const images = document.querySelectorAll('.column>img');
 const scoreboardPlayer = document.querySelector('#playerScore>span');
 const scoreboardComputer = document.querySelector('#computerScore>span');
@@ -141,16 +142,20 @@ setResetBtn();
 
 let playerScore = 0;
 let computerScore = 0;
+let roundNum = 0;
 
-round.style.visibility = 'hidden';
+// roundSpan.innerText.addEventListener('change', (e) => console.log(e));
+
+roundSpan.style.visibility = 'hidden';
 message.style.visibility = 'hidden';
 
 buttons.forEach((button) => {
     button.addEventListener('click', (e) => {
-        round.innerText++;
-        round.style.visibility = 'visible';
+        roundNum++;
+        roundSpan.innerText = roundNum;
+        roundSpan.style.visibility = 'visible';
         let playerSelection = e.target.id;
-        let computerSelection = computerPlay(OPTIONS);
+        let computerSelection = 'rock'; //computerPlay(OPTIONS);
         let [roundWinner, roundMessage] = playRound(playerSelection, computerSelection);
 
         updateImages(playerSelection, computerSelection);
@@ -166,14 +171,25 @@ buttons.forEach((button) => {
         }
 
         updateGuiScore(playerScore, computerScore);
+        message.innerText = `${roundMessage}`;
+        message.style.visibility = 'visible';
 
-        if (playerScore < 3 && computerScore < 3 && round.innerText < 5) {
-            message.innerText = `${roundMessage}`;
-            message.style.visibility = 'visible';
-        } else {
+        function gameWon() {
             let gameWinner = playerScore > computerScore ? 'You' : 'Computer';
             message.innerText = `${`Game Over! ${gameWinner} Won!`}`;
             endGame();
+        }
+
+        if (roundNum <= 5) {
+            if (playerScore == 3 || computerScore == 3) {
+                gameWon();
+            }
+        } else {
+            roundSpan.style.color = 'gold';
+            roundSpan.innerText += ' - Tie Breaker!';
+            if (playerScore != computerScore) {
+                gameWon();
+            }
         }
     });
 });
