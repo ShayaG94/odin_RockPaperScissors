@@ -117,10 +117,15 @@ function endGame() {
     resetBtn.style.display = 'flex';
 }
 
-function resetGame() {
-    updateImages();
+function resetDisplay() {
     message.style.visibility = 'hidden';
     roundSpan.style.visibility = 'hidden';
+}
+
+function resetGame() {
+    updateImages();
+    resetDisplay();
+    roundSpan.innerText = '0';
     roundSpan.style.color = '';
     roundNum = 0;
     playerScore = 0;
@@ -128,6 +133,15 @@ function resetGame() {
     updateGuiScore(playerScore, computerScore);
     resetBtn.style.display = 'none';
     buttons.forEach((button) => (button.style.display = 'flex'));
+}
+
+function styleByRound() {
+    roundSpan.style.visibility = 'visible';
+    message.style.visibility = 'visible';
+    if (roundNum > 5) {
+        roundSpan.style.color = 'gold';
+        roundSpan.innerText += ' - Tie Breaker!';
+    }
 }
 
 const OPTIONS = ['rock', 'paper', 'scissors'];
@@ -139,23 +153,19 @@ const message = document.querySelector('#message');
 const buttons = document.querySelectorAll('.options');
 const resetBtn = document.createElement('button');
 setResetBtn();
+resetDisplay();
 
 let playerScore = 0;
 let computerScore = 0;
 let roundNum = 0;
 
-// roundSpan.innerText.addEventListener('change', (e) => console.log(e));
-
-roundSpan.style.visibility = 'hidden';
-message.style.visibility = 'hidden';
-
 buttons.forEach((button) => {
     button.addEventListener('click', (e) => {
         roundNum++;
         roundSpan.innerText = roundNum;
-        roundSpan.style.visibility = 'visible';
+        styleByRound();
         let playerSelection = e.target.id;
-        let computerSelection = 'rock'; //computerPlay(OPTIONS);
+        let computerSelection = computerPlay(OPTIONS);
         let [roundWinner, roundMessage] = playRound(playerSelection, computerSelection);
 
         updateImages(playerSelection, computerSelection);
@@ -172,7 +182,6 @@ buttons.forEach((button) => {
 
         updateGuiScore(playerScore, computerScore);
         message.innerText = `${roundMessage}`;
-        message.style.visibility = 'visible';
 
         function gameWon() {
             let gameWinner = playerScore > computerScore ? 'You' : 'Computer';
@@ -180,16 +189,10 @@ buttons.forEach((button) => {
             endGame();
         }
 
-        if (roundNum <= 5) {
-            if (playerScore == 3 || computerScore == 3) {
+        switch (true) {
+            case roundNum < 5 && (playerScore == 3 || computerScore == 3):
+            case roundNum >= 5 && playerScore != computerScore:
                 gameWon();
-            }
-        } else {
-            roundSpan.style.color = 'gold';
-            roundSpan.innerText += ' - Tie Breaker!';
-            if (playerScore != computerScore) {
-                gameWon();
-            }
         }
     });
 });
