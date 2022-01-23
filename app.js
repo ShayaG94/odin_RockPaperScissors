@@ -83,25 +83,20 @@ function updateGuiScore(playerScore, computerScore) {
 }
 
 function updateImages(playerSelection = null, computerSelection = null) {
-    if (playerSelection || computerSelection) {
-        images.forEach((image) => {
-            switch (image.id) {
-                case 'playerImg':
-                    image.src = `/images/${playerSelection}.jpg`;
-                    image.alt = `${playerSelection}`;
+    icons.forEach((icon) => {
+        if (playerSelection || computerSelection) {
+            switch (icon.id) {
+                case 'playerIcon':
+                    icon.className = `far fa-flip-horizontal fa-hand-${playerSelection}`;
                     break;
-                case 'computerImg':
-                    image.src = `/images/${computerSelection}.jpg`;
-                    image.alt = `${computerSelection}`;
+                case 'computerIcon':
+                    icon.className = `far fa-hand-${computerSelection}`;
                     break;
             }
-        });
-    } else {
-        images.forEach((image) => {
-            image.src = '';
-            image.alt = '';
-        });
-    }
+        } else {
+            icon.className = 'far';
+        }
+    });
 }
 
 function setResetBtn() {
@@ -146,7 +141,7 @@ function styleByRound() {
 
 const OPTIONS = ['rock', 'paper', 'scissors'];
 const roundSpan = document.querySelector('#round>span');
-const images = document.querySelectorAll('.column>img');
+const icons = document.querySelectorAll('.icon>i');
 const scoreboardPlayer = document.querySelector('#playerScore>span');
 const scoreboardComputer = document.querySelector('#computerScore>span');
 const message = document.querySelector('#message');
