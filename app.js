@@ -147,6 +147,7 @@ const scoreboardComputer = document.querySelector('#computerScore>span');
 const message = document.querySelector('#message');
 const buttons = document.querySelectorAll('.options');
 const resetBtn = document.createElement('button');
+const textColor = new RegExp(/has-text-[a-z]+/);
 setResetBtn();
 resetDisplay();
 
@@ -164,6 +165,19 @@ buttons.forEach((button) => {
         let [roundWinner, roundMessage] = playRound(playerSelection, computerSelection);
 
         updateImages(playerSelection, computerSelection);
+
+        icons.forEach((icon) => {
+            if (roundWinner === 'tie') {
+                icon.classList.replace('fas', 'far');
+                icon.parentNode.className = 'icon is-medium has-text-warning';
+            } else if (icon.id === `${roundWinner}Icon`) {
+                icon.classList.replace('far', 'fas');
+                icon.parentNode.className = 'icon is-medium has-text-success';
+            } else {
+                icon.classList.replace('fas', 'far');
+                icon.parentNode.className = 'icon is-medium has-text-danger';
+            }
+        });
 
         //  update score
         switch (roundWinner) {
