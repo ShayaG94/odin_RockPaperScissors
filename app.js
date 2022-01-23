@@ -87,11 +87,11 @@ function updateImages(playerSelection = null, computerSelection = null) {
         images.forEach((image) => {
             switch (image.id) {
                 case 'playerImg':
-                    image.src = `/img/${playerSelection}.png`;
+                    image.src = `/images/${playerSelection}.jpg`;
                     image.alt = `${playerSelection}`;
                     break;
                 case 'computerImg':
-                    image.src = `/img/${computerSelection}.png`;
+                    image.src = `/images/${computerSelection}.jpg`;
                     image.alt = `${computerSelection}`;
                     break;
             }
