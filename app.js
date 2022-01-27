@@ -6,6 +6,7 @@ function computerPlay(OPTIONS) {
     // Assign option by index # picked randomly to a variable
     const computerOption = OPTIONS[index];
     // Return said variable
+    // return 'rock';
     return computerOption;
 }
 
@@ -70,16 +71,6 @@ function capitalizeWord(word) {
 function updateGuiScore(playerScore, computerScore) {
     scoreboardPlayer.innerText = playerScore;
     scoreboardComputer.innerText = computerScore;
-    if (playerScore > computerScore) {
-        scoreboardPlayer.className = 'has-text-success';
-        scoreboardComputer.className = 'has-text-danger';
-    } else if (playerScore < computerScore) {
-        scoreboardPlayer.className = 'has-text-danger';
-        scoreboardComputer.className = 'has-text-success';
-    } else {
-        scoreboardPlayer.className = 'has-text-warning';
-        scoreboardComputer.className = 'has-text-warning';
-    }
 }
 
 function updateImages(playerSelection = null, computerSelection = null) {
@@ -192,16 +183,12 @@ buttons.forEach((button) => {
         updateGuiScore(playerScore, computerScore);
         message.innerText = `${roundMessage}`;
 
-        function gameWon() {
-            let gameWinner = playerScore > computerScore ? 'You' : 'Computer';
-            message.innerText = `${`Game Over! ${gameWinner} Won!`}`;
-            endGame();
-        }
-
         switch (true) {
             case roundNum < 5 && (playerScore == 3 || computerScore == 3):
             case roundNum >= 5 && playerScore != computerScore:
-                gameWon();
+                let gameWinner = playerScore > computerScore ? 'You' : 'Computer';
+                message.innerText = `${`Game Over! ${gameWinner} Won!`}`;
+                endGame();
         }
     });
 });
