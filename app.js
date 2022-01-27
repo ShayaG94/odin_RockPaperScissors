@@ -11,12 +11,11 @@ function computerPlay(OPTIONS) {
 }
 
 function playRound(playerSelection, computerSelection) {
-    // Return a string that declares the winner of the roundSpan
-    // "You Win/Lose! Paper beats Rock / Rock beats Scissors / Scissors beat Paper!"
-    //
+    // Return a string that declares the winner of the round
+
     let roundWinner = 'tie';
 
-    // Go by playerSelection and compare to computer selection with switch
+    // Go by playerSelection and compare to computerSelection
     switch (playerSelection) {
         case 'rock':
             switch (computerSelection) {
@@ -50,18 +49,7 @@ function playRound(playerSelection, computerSelection) {
             break;
     }
 
-    let roundMessage = '';
-    switch (roundWinner) {
-        case 'player':
-            roundMessage = `${capitalizeWord(playerSelection)} beats ${capitalizeWord(computerSelection)}!`;
-            break;
-        case 'computer':
-            roundMessage = `${capitalizeWord(computerSelection)} beats ${capitalizeWord(playerSelection)}!`;
-            break;
-        case 'tie':
-            roundMessage = "It's a Tie!";
-    }
-    return [roundWinner, roundMessage];
+    return roundWinner;
 }
 
 function capitalizeWord(word) {
@@ -71,6 +59,30 @@ function capitalizeWord(word) {
 function updateGuiScore(playerScore, computerScore) {
     scoreboardPlayer.innerText = playerScore;
     scoreboardComputer.innerText = computerScore;
+}
+
+function updateRoundMessage(playerSelection, computerSelection, roundWinner) {
+    let selections = [playerSelection, computerSelection];
+    if (selections.includes('rock') && selections.includes('paper')) {
+        message.innerText = 'Paper covers Rock!';
+    } else if (selections.includes('paper') && selections.includes('scissors')) {
+        message.innerText = 'Scissors cut Paper!';
+    } else if (selections.includes('scissors') && selections.includes('rock')) {
+        message.innerText = 'Rock crushes Scissors!';
+    } else {
+        message.innerText = 'Tie!';
+    }
+
+    switch (roundWinner) {
+        case 'player':
+            message.className = 'section title is-6 has-text-centered has-text-success py-1';
+            break;
+        case 'computer':
+            message.className = 'section title is-6 has-text-centered has-text-danger py-1';
+            break;
+        default:
+            message.className = 'section title is-6 has-text-centered has-text-warning py-1';
+    }
 }
 
 function updateImages(playerSelection = null, computerSelection = null) {
@@ -153,9 +165,10 @@ buttons.forEach((button) => {
         styleByRound();
         let playerSelection = e.target.id;
         let computerSelection = computerPlay(OPTIONS);
-        let [roundWinner, roundMessage] = playRound(playerSelection, computerSelection);
+        let roundWinner = playRound(playerSelection, computerSelection);
 
         updateImages(playerSelection, computerSelection);
+        updateRoundMessage(playerSelection, computerSelection, roundWinner);
 
         icons.forEach((icon) => {
             if (roundWinner === 'tie') {
@@ -181,13 +194,19 @@ buttons.forEach((button) => {
         }
 
         updateGuiScore(playerScore, computerScore);
-        message.innerText = `${roundMessage}`;
 
         switch (true) {
             case roundNum < 5 && (playerScore == 3 || computerScore == 3):
             case roundNum >= 5 && playerScore != computerScore:
-                let gameWinner = playerScore > computerScore ? 'You' : 'Computer';
-                message.innerText = `${`Game Over! ${gameWinner} Won!`}`;
+                let gameWinner;
+                if (playerScore > computerScore) {
+                    gameWinner = 'You';
+                    message.className = 'section title is-5 has-text-centered has-text-success py-1';
+                } else {
+                    gameWinner = 'Computer';
+                    message.className = 'section title is-5 has-text-centered has-text-danger py-1';
+                }
+                message.innerText = `${`${gameWinner} Won!`}`;
                 endGame();
         }
     });
