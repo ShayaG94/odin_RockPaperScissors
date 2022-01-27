@@ -75,13 +75,13 @@ function updateRoundMessage(playerSelection, computerSelection, roundWinner) {
 
     switch (roundWinner) {
         case 'player':
-            message.className = 'section title is-6 has-text-centered has-text-success py-1';
+            message.className = 'section title is-5 has-text-centered has-text-success py-1';
             break;
         case 'computer':
-            message.className = 'section title is-6 has-text-centered has-text-danger py-1';
+            message.className = 'section title is-5 has-text-centered has-text-danger py-1';
             break;
         default:
-            message.className = 'section title is-6 has-text-centered has-text-warning py-1';
+            message.className = 'section title is-5 has-text-centered has-text-warning py-1';
     }
 }
 
@@ -116,7 +116,8 @@ function endGame() {
 }
 
 function resetDisplay() {
-    message.style.visibility = 'hidden';
+    message.innerText = 'Choose an option:';
+    message.className = 'section title is-5 has-text-centered has-text-primary py-1';
     roundSpan.style.visibility = 'hidden';
 }
 
