@@ -117,7 +117,7 @@ function endGame() {
 
 function resetDisplay() {
     message.innerText = 'Choose an option:';
-    message.className = 'section title is-5 has-text-centered has-text-primary py-1';
+    message.className = 'section title is-5 has-text-centered has-text-link py-1';
     roundSpan.style.visibility = 'hidden';
 }
 
